@@ -40,7 +40,7 @@ This month's headline
 What changed (why it matters)
 •  [Summarize each major legislative or regulatory action: bill name, state, date, purpose, and impact.]
 •  [Include short contextual explanation ("why it matters") for each.]
-•  [Add 2–3 reputable source links per item: e.g. TechCrunch, Skadden, Reuters, Gov.ca.gov, LegiScan, AP News.]
+•  [Add 2–3 reputable source links per item: e.g. TechCrunch, Skadden, Reuters, CA.gov, LegiScan, AP News.]
 
 ⸻
 
