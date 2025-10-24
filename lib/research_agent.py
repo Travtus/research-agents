@@ -78,9 +78,18 @@ def run_research_agent(input_text: str, workflow_id: str = None) -> dict:
     Returns:
         dict: The agent's JSON output
     """
+    import asyncio
+    
     try:
-        # Run the agent
-        result = Runner.run_sync(research_agent, input_text)
+        # Get or create event loop
+        try:
+            loop = asyncio.get_event_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+        
+        # Run the agent asynchronously
+        result = loop.run_until_complete(Runner.run(research_agent, input_text))
         
         # Get the final output
         final_output = result.final_output
