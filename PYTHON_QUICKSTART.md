@@ -171,6 +171,7 @@ curl http://localhost:3000/api/health
 ## 📊 What's Different from JavaScript?
 
 ✅ **Using official Python SDK** (`openai-agents`)  
+> ℹ️ Install the package as `openai-agents`, then import in Python as `from agents import Agent`
 ✅ **Better documentation** ([openai.github.io/openai-agents-python/](https://openai.github.io/openai-agents-python/))  
 ✅ **More stable** - Public SDK vs internal tool  
 ✅ **Community support** - More examples and resources  
