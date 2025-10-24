@@ -6,7 +6,6 @@ Using the official OpenAI Agents SDK for Python
 from agents import Agent, Runner, WebSearchTool
 from pydantic import BaseModel
 import json
-import os
 
 
 class LegislationReport(BaseModel):
@@ -74,10 +73,10 @@ def run_research_agent(input_text: str, workflow_id: str = None) -> dict:
     
     Args:
         input_text: The query/prompt for the agent
-        workflow_id: Optional workflow ID for tracing
+        workflow_id: Optional workflow ID for tracing (not currently used)
         
     Returns:
-        dict with output_text and output_parsed
+        dict: The agent's JSON output
     """
     try:
         # Run the agent
@@ -89,29 +88,22 @@ def run_research_agent(input_text: str, workflow_id: str = None) -> dict:
         if not final_output:
             raise ValueError("Agent returned no output")
         
-        # Try to parse as structured output
-        try:
-            # If the output is already structured
-            if isinstance(final_output, dict):
-                output_parsed = final_output
-            else:
-                # Try to parse as JSON
-                output_parsed = json.loads(final_output)
-        except (json.JSONDecodeError, TypeError):
-            # If not JSON, return as text
-            output_parsed = {
-                "Title": "AI & Chatbot Regulation — US C-Suite Brief",
-                "Date": "N/A",
-                "Headline": final_output,
-                "What_Changed": "",
-                "Exec_Todo": "",
-                "Legislation_Highlights": ""
-            }
+        # If the output is already a dict, return it
+        if isinstance(final_output, dict):
+            return final_output
         
-        return {
-            "output_text": json.dumps(output_parsed, indent=2),
-            "output_parsed": output_parsed
-        }
+        # If it's a string, try to parse as JSON
+        if isinstance(final_output, str):
+            try:
+                return json.loads(final_output)
+            except json.JSONDecodeError:
+                # If it's not valid JSON, return it wrapped in a simple structure
+                return {
+                    "response": final_output
+                }
+        
+        # Fallback: return as-is
+        return final_output
         
     except Exception as e:
         raise Exception(f"Error running research agent: {str(e)}")
@@ -123,10 +115,10 @@ async def run_research_agent_async(input_text: str, workflow_id: str = None) -> 
     
     Args:
         input_text: The query/prompt for the agent
-        workflow_id: Optional workflow ID for tracing
+        workflow_id: Optional workflow ID for tracing (not currently used)
         
     Returns:
-        dict with output_text and output_parsed
+        dict: The agent's JSON output
     """
     try:
         # Run the agent asynchronously
@@ -138,26 +130,22 @@ async def run_research_agent_async(input_text: str, workflow_id: str = None) -> 
         if not final_output:
             raise ValueError("Agent returned no output")
         
-        # Try to parse as structured output
-        try:
-            if isinstance(final_output, dict):
-                output_parsed = final_output
-            else:
-                output_parsed = json.loads(final_output)
-        except (json.JSONDecodeError, TypeError):
-            output_parsed = {
-                "Title": "AI & Chatbot Regulation — US C-Suite Brief",
-                "Date": "N/A",
-                "Headline": final_output,
-                "What_Changed": "",
-                "Exec_Todo": "",
-                "Legislation_Highlights": ""
-            }
+        # If the output is already a dict, return it
+        if isinstance(final_output, dict):
+            return final_output
         
-        return {
-            "output_text": json.dumps(output_parsed, indent=2),
-            "output_parsed": output_parsed
-        }
+        # If it's a string, try to parse as JSON
+        if isinstance(final_output, str):
+            try:
+                return json.loads(final_output)
+            except json.JSONDecodeError:
+                # If it's not valid JSON, return it wrapped in a simple structure
+                return {
+                    "response": final_output
+                }
+        
+        # Fallback: return as-is
+        return final_output
         
     except Exception as e:
         raise Exception(f"Error running research agent: {str(e)}")

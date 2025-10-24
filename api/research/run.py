@@ -12,10 +12,16 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
 
 from lib.research_agent import run_research_agent
+from lib.auth import validate_api_key, send_unauthorized_response
 
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
+        # Validate API key first
+        if not validate_api_key(self):
+            send_unauthorized_response(self)
+            return
+        
         try:
             # Read request body
             content_length = int(self.headers.get('Content-Length', 0))
@@ -40,8 +46,8 @@ class handler(BaseHTTPRequestHandler):
                 )
                 return
             
-            # Run the agent
-            workflow_id = data.get('workflowId', 'wf_68fb4285b7848190a7d1feb126fe069e056baab3ea0bf879')
+            # Run the agent and get JSON output directly
+            workflow_id = data.get('workflowId')
             result = run_research_agent(input_as_text, workflow_id)
             
             # Send success response
@@ -49,22 +55,11 @@ class handler(BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'application/json')
             self.send_header('Access-Control-Allow-Origin', '*')
             self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
-            self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+            self.send_header('Access-Control-Allow-Headers', 'Content-Type, X-API-Key, Authorization')
             self.end_headers()
             
-            response = {
-                'success': True,
-                'data': {
-                    'output_text': result['output_text'],
-                    'output_parsed': result['output_parsed']
-                },
-                'metadata': {
-                    'timestamp': '2025-10-24T12:00:00.000Z',
-                    'workflowId': workflow_id
-                }
-            }
-            
-            self.wfile.write(json.dumps(response).encode())
+            # Return the agent's JSON output directly
+            self.wfile.write(json.dumps(result).encode())
             
         except Exception as e:
             self.send_error_response(500, str(e))
@@ -73,7 +68,7 @@ class handler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type, X-API-Key, Authorization')
         self.end_headers()
         return
     
