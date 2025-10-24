@@ -1,70 +1,77 @@
-# Research Agents API
+# Research Agents API (Python)
 
-An AI Legislation Research Agent using OpenAI's Agents SDK, hosted on Vercel and designed for easy integration with n8n workflows.
+An AI Legislation Research Agent using the **official OpenAI Agents SDK (Python)**, hosted on Vercel and designed for easy integration with n8n workflows.
 
 ## Features
 
+- 🐍 **Python** - Using official OpenAI Agents SDK
 - 🤖 AI Legislation Research Agent with web search capabilities
-- 📊 Structured JSON output with Zod schema validation
+- 📊 Structured JSON output with Pydantic validation
 - 🔍 Automated research on US AI & Chatbot legislation
 - ⚡ Serverless deployment on Vercel
 - 🔗 Easy integration with n8n workflows
 - 🌐 CORS-enabled REST API
 - 📝 C-suite friendly regulatory newsletters
+- 📚 **Well-documented** - Official SDK with extensive documentation
 
 ## 🚀 Quick Start
 
-**Get started in 5 minutes:** See [QUICKSTART.md](QUICKSTART.md) for a streamlined setup guide.
+**Get started in 5 minutes:** See [PYTHON_QUICKSTART.md](PYTHON_QUICKSTART.md) for a streamlined setup guide.
 
 ### 1. Installation
 
 ```bash
-npm install
+# Install Python dependencies
+pip install -r requirements.txt
 ```
 
 ### 2. Environment Setup
 
-Create a `.env` file:
-
-```bash
-cp .env.example .env
-```
-
-Add your OpenAI API key:
+Your `.env` file should already be created with:
 
 ```env
 OPENAI_API_KEY=sk-your-openai-api-key-here
 ```
 
-### 3. Local Development
+### 3. Test Locally
 
 ```bash
-# Start development server
-npm run dev
+# Test the agent
+python test_agent.py
+```
 
-# Test the agent (in another terminal)
-npm test
+### 4. Local Development (Optional)
+
+```bash
+# Install Vercel CLI
+npm install -g vercel
+
+# Run development server
+vercel dev
 ```
 
 The API will be available at `http://localhost:3000`
 
-### 4. Deploy to Vercel
+### 5. Deploy to Vercel
 
 #### Option 1: Using Vercel Dashboard (Recommended)
 
-1. Push code to GitHub
+1. Push code to GitHub (use a branch if main is protected)
 2. Import to Vercel at [vercel.com/new](https://vercel.com/new)
-3. Add `OPENAI_API_KEY` environment variable
-4. Deploy!
+3. **Framework Preset**: Other (auto-detects Python)
+4. Add environment variable: `OPENAI_API_KEY`
+5. Deploy!
+
+Vercel automatically detects Python from `requirements.txt` and `.py` files.
 
 See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
 
 #### Option 2: Using Vercel CLI
 
 ```bash
-npx vercel login
-npx vercel env add OPENAI_API_KEY production
-npm run deploy
+vercel login
+vercel env add OPENAI_API_KEY production
+vercel --prod
 ```
 
 ## API Endpoints
@@ -201,11 +208,11 @@ See the API files for details.
 
 ## Agent Configuration
 
-The research agent is configured in `lib/researchAgent.js`:
+The research agent is configured in `lib/research_agent.py`:
 
-- **Model**: GPT-5 with reasoning
-- **Tools**: Web search with high context size
-- **Output Schema**: Structured JSON with Zod validation
+- **SDK**: Official OpenAI Agents SDK (Python)
+- **Model**: GPT-4o (powerful and fast)
+- **Output Schema**: Structured with Pydantic
 - **Features**: 
   - Searches latest US AI/chatbot legislation
   - Generates C-suite friendly newsletters
@@ -213,12 +220,24 @@ The research agent is configured in `lib/researchAgent.js`:
 
 ### Customizing the Agent
 
-Edit `lib/researchAgent.js` to modify:
+Edit `lib/research_agent.py` to modify:
+
+```python
+from agents import Agent, Runner
+
+research_agent = Agent(
+    name="AI Legislation Research Agent",
+    instructions="Your custom instructions...",
+    model="gpt-4o",  # or gpt-4-turbo, gpt-3.5-turbo
+    # Add tools as needed
+)
+```
+
+**Customization options:**
 - Instructions/prompts
-- Output schema structure
-- Search parameters
-- Model settings
-- Reasoning effort level
+- Output schema (Pydantic models)
+- Model selection
+- Tools and capabilities
 
 ### Environment Variables
 
