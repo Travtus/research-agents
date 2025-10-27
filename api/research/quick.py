@@ -41,20 +41,6 @@ class handler(BaseHTTPRequestHandler):
             body = self.rfile.read(content_length).decode('utf-8')
             data = json.loads(body) if body else {}
             
-            # Get query from body
-            query = data.get('query') or data.get('input_as_text')
-            
-            if not query:
-                self.send_response(400)
-                self.send_header('Content-Type', 'application/json')
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.end_headers()
-                self.wfile.write(json.dumps({
-                    'success': False,
-                    'error': 'Either "query" or "input_as_text" is required in request body'
-                }).encode())
-                return
-            
             # Check for OpenAI API key
             if not os.getenv('OPENAI_API_KEY'):
                 self.send_response(500)
@@ -67,8 +53,8 @@ class handler(BaseHTTPRequestHandler):
                 }).encode())
                 return
             
-            # Run the agent and get JSON output directly
-            result = run_research_agent(query, data.get('workflowId'))
+            # Run the agent with a simple trigger - the agent knows what to do
+            result = run_research_agent("Generate the report", data.get('workflowId'))
             
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')

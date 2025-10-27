@@ -41,20 +41,6 @@ class handler(BaseHTTPRequestHandler):
             body = self.rfile.read(content_length).decode('utf-8')
             data = json.loads(body) if body else {}
             
-            # Get input_as_text from body
-            input_as_text = data.get('input_as_text')
-            
-            if not input_as_text:
-                self.send_response(400)
-                self.send_header('Content-Type', 'application/json')
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.end_headers()
-                self.wfile.write(json.dumps({
-                    'success': False,
-                    'error': 'input_as_text is required'
-                }).encode())
-                return
-            
             # Check for OpenAI API key
             if not os.getenv('OPENAI_API_KEY'):
                 self.send_response(500)
@@ -67,9 +53,9 @@ class handler(BaseHTTPRequestHandler):
                 }).encode())
                 return
             
-            # Run the agent and get JSON output directly
+            # Run the agent with a simple trigger - the agent knows what to do
             workflow_id = data.get('workflowId')
-            result = run_multifamily_agent(input_as_text, workflow_id)
+            result = run_multifamily_agent("Generate the report", workflow_id)
             
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
