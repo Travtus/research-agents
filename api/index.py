@@ -35,38 +35,63 @@ class handler(BaseHTTPRequestHandler):
             'language': 'python',
             'description': 'AI Legislation Research Agent using OpenAI Agents SDK (Python)',
             'sdk': 'openai-agents (official Python SDK)',
-            'endpoints': {
-                'health': {
-                    'method': 'GET',
-                    'path': '/api/health',
-                    'description': 'Health check endpoint'
+        'endpoints': {
+            'health': {
+                'method': 'GET',
+                'path': '/api/health',
+                'description': 'Health check endpoint'
+            },
+            'quickResearch': {
+                'method': 'POST',
+                'path': '/api/research/quick',
+                'description': 'AI Legislation Research - Quick query endpoint',
+                'headers': {
+                    'X-API-Key': 'string (required) - Your API key',
+                    'Content-Type': 'application/json'
                 },
-                'quickResearch': {
-                    'method': 'POST',
-                    'path': '/api/research/quick',
-                    'description': 'Quick research query endpoint - Returns agent JSON output directly',
-                    'headers': {
-                        'X-API-Key': 'string (required) - Your API key',
-                        'Content-Type': 'application/json'
-                    },
-                    'body': {
-                        'query': 'string (required)'
-                    }
-                },
-                'fullResearch': {
-                    'method': 'POST',
-                    'path': '/api/research/run',
-                    'description': 'Full research workflow - Returns agent JSON output directly',
-                    'headers': {
-                        'X-API-Key': 'string (required) - Your API key',
-                        'Content-Type': 'application/json'
-                    },
-                    'body': {
-                        'input_as_text': 'string (required)',
-                        'workflowId': 'string (optional)'
-                    }
+                'body': {
+                    'query': 'string (required)'
                 }
             },
+            'fullResearch': {
+                'method': 'POST',
+                'path': '/api/research/run',
+                'description': 'AI Legislation Research - Full workflow',
+                'headers': {
+                    'X-API-Key': 'string (required) - Your API key',
+                    'Content-Type': 'application/json'
+                },
+                'body': {
+                    'input_as_text': 'string (required)',
+                    'workflowId': 'string (optional)'
+                }
+            },
+            'quickMultifamily': {
+                'method': 'POST',
+                'path': '/api/multifamily/quick',
+                'description': 'Multifamily Regulation Tracker - Quick query endpoint',
+                'headers': {
+                    'X-API-Key': 'string (required) - Your API key',
+                    'Content-Type': 'application/json'
+                },
+                'body': {
+                    'query': 'string (required)'
+                }
+            },
+            'fullMultifamily': {
+                'method': 'POST',
+                'path': '/api/multifamily/run',
+                'description': 'Multifamily Regulation Tracker - Full workflow',
+                'headers': {
+                    'X-API-Key': 'string (required) - Your API key',
+                    'Content-Type': 'application/json'
+                },
+                'body': {
+                    'input_as_text': 'string (required)',
+                    'workflowId': 'string (optional)'
+                }
+            }
+        },
             'documentation': 'https://github.com/your-username/research-agents',
             'status': 'operational',
             'timestamp': '2025-10-24T12:00:00.000Z'
