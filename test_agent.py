@@ -6,6 +6,7 @@ Run with: python test_agent.py
 
 import os
 import sys
+import json
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -33,8 +34,8 @@ def test_agent():
         )
         
         print('✅ Agent execution completed!\n')
-        print('📊 Parsed Output:\n')
-        print(result['output_text'])
+        print('📊 Agent JSON Output:\n')
+        print(json.dumps(result, indent=2))
         print('\n' + '='*80 + '\n')
         
     except Exception as e:

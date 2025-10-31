@@ -1,5 +1,5 @@
 """
-AI Legislation Research Agent
+Multifamily Regulation Tracker Agent
 Using the official OpenAI Agents SDK for Python
 """
 
@@ -8,14 +8,14 @@ from pydantic import BaseModel
 import json
 
 
-class LegislationReport(BaseModel):
-    """Structured output for legislation research"""
+class MultifamilyReport(BaseModel):
+    """Structured output for multifamily regulation research"""
     Title: str
     Date: str
     Headline: str
     What_Changed: str
     Exec_Todo: str
-    Legislation_Highlights: str
+    Regulation_Highlights: str
 
 
 # Configure web search tool
@@ -23,12 +23,12 @@ web_search_tool = WebSearchTool(
     search_context_size="high"
 )
 
-# Define the research agent
-research_agent = Agent(
-    name="AI Legislation Research Agent",
-    instructions="""Search the latest changes in legislation affecting artificial intelligence (AI) and chatbots across the United States in the past month, then draft a concise, C-suite-friendly regulatory newsletter in this exact format:
+# Define the multifamily regulation tracker agent
+multifamily_agent = Agent(
+    name="Multifamily Regulation Tracker Agent",
+    instructions="""Search the latest changes in regulations affecting multifamily housing and property management across the United States in the past month, then draft a concise, C-suite-friendly regulatory newsletter in this exact format:
 
-AI & Chatbot Regulation — US C-Suite Brief
+Multifamily Regulation — US C-Suite Brief
 Coverage: [Insert date range for the past 30 days]
 
 This month's headline
@@ -37,22 +37,22 @@ This month's headline
 ⸻
 
 What changed (why it matters)
-•  [Summarize each major legislative or regulatory action: bill name, state, date, purpose, and impact.]
+•  [Summarize each major legislative or regulatory action: regulation name, jurisdiction, date, purpose, and impact on multifamily housing/property management.]
 •  [Include short contextual explanation ("why it matters") for each.]
-•  [Add 2–3 reputable source links per item: e.g. TechCrunch, Skadden, Reuters, CA.gov, LegiScan, AP News.]
+•  [Add 2–3 reputable source links per item: e.g. HousingWire, Multifamily Executive, National Apartment Association, state housing agencies, AP News.]
 
 ⸻
 
 Exec To-Dos (now with context)
 1.  [Describe top executive actions required, ordered by importance.]
 2.  [Each item should include 1 sentence of context: why it matters, what to do, and expected outcome.]
-3.  [Limit to 6–7 items. Use clear verbs ("Decide", "Ship", "Start", "Flow", "Adopt").]
+3.  [Limit to 6–7 items. Use clear verbs ("Review", "Update", "Comply", "Train", "Monitor").]
 
 ⸻
 
 Last 30 days — proposed/passed items (1-liners + links)
-•  [Bill identifier + status + concise one-liner on scope.] [Add source URLs at the end in parentheses.]
-•  [Repeat for all relevant state or federal items.]
+•  [Regulation identifier + status + concise one-liner on scope.] [Add source URLs at the end in parentheses.]
+•  [Repeat for all relevant local, state or federal items.]
 
 ⸻
 
@@ -61,15 +61,16 @@ Formatting rules: Parse the output into JSON with the structure provided.
 – Keep the tone executive-brief level (factual, direct, but engaging).
 – Include live URLs for each cited source.
 – Do not include commentary or speculation.
+– Focus on regulations affecting: rent control, tenant protections, fair housing, building codes, energy efficiency, property taxes, eviction procedures, and affordable housing requirements.
 – The total output should fit comfortably on one page when rendered in Notion or email.""",
     model="gpt-4o",  # Using gpt-4o as it's available and powerful
     tools=[web_search_tool],  # Enable web search
 )
 
 
-def run_research_agent(input_text: str, workflow_id: str = None) -> dict:
+def run_multifamily_agent(input_text: str, workflow_id: str = None) -> dict:
     """
-    Run the research agent workflow
+    Run the multifamily regulation tracker workflow
     
     Args:
         input_text: The query/prompt for the agent
@@ -89,7 +90,7 @@ def run_research_agent(input_text: str, workflow_id: str = None) -> dict:
             asyncio.set_event_loop(loop)
         
         # Run the agent asynchronously
-        result = loop.run_until_complete(Runner.run(research_agent, input_text))
+        result = loop.run_until_complete(Runner.run(multifamily_agent, input_text))
         
         # Get the final output
         final_output = result.final_output
@@ -115,12 +116,12 @@ def run_research_agent(input_text: str, workflow_id: str = None) -> dict:
         return final_output
         
     except Exception as e:
-        raise Exception(f"Error running research agent: {str(e)}")
+        raise Exception(f"Error running multifamily agent: {str(e)}")
 
 
-async def run_research_agent_async(input_text: str, workflow_id: str = None) -> dict:
+async def run_multifamily_agent_async(input_text: str, workflow_id: str = None) -> dict:
     """
-    Async version of run_research_agent
+    Async version of run_multifamily_agent
     
     Args:
         input_text: The query/prompt for the agent
@@ -131,7 +132,7 @@ async def run_research_agent_async(input_text: str, workflow_id: str = None) -> 
     """
     try:
         # Run the agent asynchronously
-        result = await Runner.run(research_agent, input_text)
+        result = await Runner.run(multifamily_agent, input_text)
         
         # Get the final output
         final_output = result.final_output
@@ -157,5 +158,5 @@ async def run_research_agent_async(input_text: str, workflow_id: str = None) -> 
         return final_output
         
     except Exception as e:
-        raise Exception(f"Error running research agent: {str(e)}")
+        raise Exception(f"Error running multifamily agent: {str(e)}")
 

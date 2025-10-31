@@ -1,6 +1,6 @@
 """
-Full research workflow endpoint
-POST /api/research/run
+Full multifamily regulation tracker workflow endpoint
+POST /api/multifamily/run
 """
 
 from http.server import BaseHTTPRequestHandler
@@ -11,7 +11,7 @@ import os
 # Add parent directory to path to import lib
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
 
-from lib.research_agent import run_research_agent
+from lib.multifamily_agent import run_multifamily_agent
 
 
 class handler(BaseHTTPRequestHandler):
@@ -55,7 +55,7 @@ class handler(BaseHTTPRequestHandler):
             
             # Run the agent with a simple trigger - the agent knows what to do
             workflow_id = data.get('workflowId')
-            result = run_research_agent("Generate the report", workflow_id)
+            result = run_multifamily_agent("Generate the report", workflow_id)
             
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
@@ -79,3 +79,4 @@ class handler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type, X-API-Key, Authorization')
         self.end_headers()
+
